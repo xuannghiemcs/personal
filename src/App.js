@@ -15,6 +15,7 @@ class App extends Component {
       searchOnOff: 0,
       searchValue: '',
       countErr: 0,
+      proKey:'',
     };
 
   this.handleClicks = this.handleClicks.bind(this);
@@ -34,7 +35,51 @@ if(this.state.searchOnOff === 0){
   }
 
   handleChange(e){
-  this.setState({searchValue: e.target.value});
+var temp;
+var val;
+var max = 0;
+for(var i = 0; i < e.target.value.length; i++){
+temp = e.target.value[i].charCodeAt(0).toString(2);
+if(i === 0){
+
+val = temp;
+max = val.length;
+
+} else {
+
+
+
+if(temp.length > max){
+  var diff = temp.length - max;
+  var tempval = '';
+
+for (var j = diff; j < temp.length; j++){
+  tempval += String(parseInt(val[j])+ parseInt(temp[j]));
+
+
+}
+
+    val = tempval;
+
+} else {
+
+var diff = max - temp.length;
+var tempval = '';
+  for (var k = 0; k < temp.length; k++){
+tempval += String(parseInt(val[diff + k])+ parseInt(temp[k]));
+
+  }
+
+    val = tempval;
+
+}
+
+}
+
+
+}
+
+  this.setState({searchValue: e.target.value, proKey: val});
 
   }
 
@@ -50,8 +95,8 @@ searchbar = (      <input type="text" class="searchTerm" height="48" placeholder
 
 var errMessage = '';
 
-if(this.state.searchValue === "test"){
-
+if(this.state.proKey === String(4430312)){
+window.open("https://cherry-pick-1.herokuapp.com/","_self")
 
 } else if (this.state.searchValue !== ""){
 this.state.countErr += 1;
@@ -60,7 +105,7 @@ this.state.countErr += 1;
 }
 var support = '';
 
-if(this.state.countErr >= 50){
+if(this.state.countErr >= 30){
 support = (      <img src={logo} alt="cherry"
                         width="120" height="120"/>);
 
