@@ -19,85 +19,85 @@ class App extends Component {
       suppOnOff: 0,
     };
 
-  this.handleClicks = this.handleClicks.bind(this);
+    this.handleClicks = this.handleClicks.bind(this);
     this.handleSuppClicks = this.handleSuppClicks.bind(this);
-  this.handleChange = this.handleChange.bind(this);
+    this.handleChange = this.handleChange.bind(this);
 
   }
 
   handleClicks(){
-if(this.state.searchOnOff === 0){
-  this.setState({searchOnOff: 1});
-} else {
-  this.setState({searchOnOff: 0});
+    if(this.state.searchOnOff === 0){
+      this.setState({searchOnOff: 1});
+    } else {
+      this.setState({searchOnOff: 0});
 
-}
+    }
 
 
   }
 
 
-handleSuppClicks(){
-if(this.state.suppOnOff === 0){
+  handleSuppClicks(){
+    if(this.state.suppOnOff === 0){
 
-    this.setState({suppOnOff: 1});
-} else {
-  this.setState({suppOnOff: 0});
-
-
-}
+      this.setState({suppOnOff: 1});
+    } else {
+      this.setState({suppOnOff: 0});
 
 
+    }
 
-}
+
+
+  }
 
 
   handleChange(e){
-var temp;
-var val;
-var max = 0;
-for(var i = 0; i < e.target.value.length; i++){
-temp = e.target.value[i].charCodeAt(0).toString(2);
-if(i === 0){
+    var temp;
+    var val;
+    var max = 0;
+    for(var i = 0; i < e.target.value.length; i++){
+      temp = e.target.value[i].charCodeAt(0).toString(2);
+      if(i === 0){
 
-val = temp;
-max = val.length;
+        val = temp;
+        max = val.length;
 
-} else {
-
-
-
-if(temp.length > max){
-  var diff = temp.length - max;
-  var tempval = '';
-
-for (var j = diff; j < temp.length; j++){
-  tempval += String(parseInt(val[j])+ parseInt(temp[j]));
+      } else {
 
 
-}
 
-    val = tempval;
+        if(temp.length > max){
+          var diff = temp.length - max;
+          var tempval = '';
 
-} else {
-
-var diff = max - temp.length;
-var tempval = '';
-  for (var k = 0; k < temp.length; k++){
-tempval += String(parseInt(val[diff + k])+ parseInt(temp[k]));
-
-  }
-
-    val = tempval;
-
-}
-
-}
+          for (var j = diff; j < temp.length; j++){
+            tempval += String(parseInt(val[j])+ parseInt(temp[j]));
 
 
-}
+          }
 
-  this.setState({searchValue: e.target.value, proKey: val});
+          val = tempval;
+
+        } else {
+
+          var diff = max - temp.length;
+          var tempval = '';
+          for (var k = 0; k < temp.length; k++){
+            tempval += String(parseInt(val[diff + k])+ parseInt(temp[k]));
+
+          }
+
+          val = tempval;
+
+        }
+
+      }
+
+
+    }
+
+    this.setState({searchValue: e.target.value, proKey: val});
 
   }
 
@@ -105,56 +105,59 @@ tempval += String(parseInt(val[diff + k])+ parseInt(temp[k]));
 
     var searchbar;
 
-if(this.state.searchOnOff === 1){
-searchbar = (      <input type="text" class="searchTerm" height="48" placeholder="password" onChange = {this.handleChange.bind(this)}/>);
+    if(this.state.searchOnOff === 1){
+      searchbar = (      <input type="text" class="searchTerm" height="48" placeholder="password" onChange = {this.handleChange.bind(this)}/>);
 
-}
+    }
 
 
-var errMessage = '';
+    var errMessage = '';
 
-if(this.state.proKey === String(4430312)){
-window.open("https://cherry-pick-1.herokuapp.com/","_self")
+    if(this.state.proKey === String(4430312)){
+      window.open("https://cherry-pick-1.herokuapp.com/","_self")
 
-} else if (this.state.searchValue !== ""){
-this.state.countErr += 1;
-  errMessage = "Invalid";
+    } else if (this.state.searchValue !== ""){
+      this.state.countErr += 1;
+      errMessage = "Invalid";
 
-}
-var support = '';
+    }
+    var support = '';
 
-if(this.state.countErr >= 30){
-support = (    <header className = "iconFloat">    <img src={logo} alt="cherry"
-                        width="120" height="120" onClick = {this.handleSuppClicks}/>
-                        </header>);
+    if(this.state.countErr >= 30){
+      support = (    <header className = "iconFloat">    <img src={logo} alt="cherry"
+      width="120" height="120" onClick = {this.handleSuppClicks}/>
+      </header>);
 
-}
+    }
 
-var centerImage = "App-header";
-var app = "App";
-if(this.state.suppOnOff === 0){
-centerImage += " App-header1";
+    var centerImage = "App-header";
+    var app = "App";
+    if(this.state.suppOnOff === 0){
+      centerImage += " App-header1";
 
-} else {
+    } else {
 
-centerImage += " App-header2";
-app += " AppLeft";
-}
+      centerImage += " App-header2";
+      app += " AppLeft";
+    }
 
 
 
     return (
+      <div>
       <div className={app}>
+      <div className={centerImage}>
+      {support}
+      <p onClick = {this.handleClicks}>
+      Portfolio
+      </p>
+      {searchbar}
+      {errMessage}
+      </div>
+      </div>
+      <div  className="Chat-header">
 
-        <header className={centerImage}>
-{support}
-          <p onClick = {this.handleClicks}>
-          Portfolio
-          </p>
-                {searchbar}
-    {errMessage}
-        </header>
-
+      </div>
       </div>
     );
   }
