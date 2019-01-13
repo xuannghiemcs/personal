@@ -16,9 +16,11 @@ class App extends Component {
       searchValue: '',
       countErr: 0,
       proKey:'',
+      suppOnOff: 0,
     };
 
   this.handleClicks = this.handleClicks.bind(this);
+    this.handleSuppClicks = this.handleSuppClicks.bind(this);
   this.handleChange = this.handleChange.bind(this);
 
   }
@@ -33,6 +35,22 @@ if(this.state.searchOnOff === 0){
 
 
   }
+
+
+handleSuppClicks(){
+if(this.state.suppOnOff === 0){
+
+    this.setState({suppOnOff: 1});
+} else {
+  this.setState({suppOnOff: 0});
+
+
+}
+
+
+
+}
+
 
   handleChange(e){
 var temp;
@@ -106,15 +124,30 @@ this.state.countErr += 1;
 var support = '';
 
 if(this.state.countErr >= 30){
-support = (      <img src={logo} alt="cherry"
-                        width="120" height="120"/>);
+support = (    <header className = "iconFloat">    <img src={logo} alt="cherry"
+                        width="120" height="120" onClick = {this.handleSuppClicks}/>
+                        </header>);
 
 }
 
+var centerImage = "App-header";
+var app = "App";
+if(this.state.suppOnOff === 0){
+centerImage += " App-header1";
+
+} else {
+
+centerImage += " App-header2";
+app += " AppLeft";
+}
+
+
+
     return (
-      <div className="App">
-        <header className="App-header">
-      {support}
+      <div className={app}>
+
+        <header className={centerImage}>
+{support}
           <p onClick = {this.handleClicks}>
           Portfolio
           </p>
