@@ -8,7 +8,7 @@
 
 
 .App-header {
-  min-height: 100vh;
+  min-height: 90vh;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -28,6 +28,13 @@
   color: white;
 }
 
+
+.messenger {
+
+  min-height: 0vh;
+  background-color:#282c34;
+
+}
 
 .App-header1 {
 

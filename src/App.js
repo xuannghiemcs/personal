@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import logo from './awards-boxed.png';
 import './App.css';
+import {Button, InputGroup, FormControl} from 'react-bootstrap';
+
+
 
 class App extends Component {
 
@@ -106,7 +109,18 @@ class App extends Component {
     var searchbar;
 
     if(this.state.searchOnOff === 1){
-      searchbar = (      <input type="text" class="searchTerm" height="48" placeholder="password" onChange = {this.handleChange.bind(this)}/>);
+      searchbar = (
+<div width = "20%">
+        <InputGroup className="mb-3">
+          <FormControl
+            placeholder="password"
+            aria-label="password"
+            aria-describedby="basic-addon2"
+            onChange = {this.handleChange.bind(this)}
+          />
+        </InputGroup>
+</div>
+);
 
     }
 
@@ -132,11 +146,29 @@ class App extends Component {
 
     var centerImage = "App-header";
     var app = "App";
+    var msge = '';
     if(this.state.suppOnOff === 0){
       centerImage += " App-header1";
 
     } else {
+msge = (      <div  className="Chat-header">
 
+        <InputGroup className="mb-3">
+          <FormControl
+            placeholder="message"
+            aria-label="message"
+            aria-describedby="basic-addon2"
+          />
+          <InputGroup.Append>
+            <Button variant="outline-secondary">Button</Button>
+          </InputGroup.Append>
+        </InputGroup>
+
+        <div className="messenger">
+          <p>Hi there, looks like you weren't given access.</p>
+        </div>
+
+      </div>);
       centerImage += " App-header2";
       app += " AppLeft";
     }
@@ -155,9 +187,7 @@ class App extends Component {
       {errMessage}
       </div>
       </div>
-      <div  className="Chat-header">
-
-      </div>
+{msge}
       </div>
     );
   }
