@@ -20,12 +20,15 @@ class App extends Component {
       countErr: 0,
       proKey:'',
       suppOnOff: 0,
+      searchValueMsg: '',
+      saveMsg: [],
     };
 
     this.handleClicks = this.handleClicks.bind(this);
     this.handleSuppClicks = this.handleSuppClicks.bind(this);
     this.handleChange = this.handleChange.bind(this);
-
+    this.handleChangeMsg = this.handleChangeMsg.bind(this);
+    this.handleClicksMsg = this.handleClicksMsg.bind(this);
   }
 
   handleClicks(){
@@ -104,6 +107,24 @@ class App extends Component {
 
   }
 
+
+handleChangeMsg(e){
+
+    this.setState({searchValueMsg: e.target.value});
+
+
+}
+
+handleClicksMsg(){
+
+if(this.state.searchValueMsg != ''){
+this.state.saveMsg.push(this.state.searchValueMsg);
+      this.setState({searchValueMsg: ''});
+}
+
+
+}
+
   render() {
 
     var searchbar;
@@ -144,6 +165,50 @@ class App extends Component {
 
     }
 
+
+
+    var messages = [];
+    if(this.state.saveMsg !== []){
+      for(var i = 0; i < this.state.saveMsg.length; i++){
+
+        if(this.state.saveMsg[i].length > 40){
+
+var divide = Math.ceil(this.state.saveMsg[i].length/40);
+
+for(var j = 0; j < divide; j++){
+var temp = '';
+  for(var k = 0 + j*40; k < 40*(1 + j); k++){
+    if(this.state.saveMsg[i][k]){
+
+temp += this.state.saveMsg[i][k];
+
+    }
+
+  }
+
+  messages.push(        <div className="messenger"> <div className="space">
+            <p></p>
+          </div>
+            <p><mark>{temp}</mark>&nbsp;&nbsp;&nbsp;</p>
+          </div>);
+
+}
+
+        }else{
+          messages.push(        <div className="messenger"> <div className="space">
+                    <p></p>
+                  </div>
+                    <p><mark>{this.state.saveMsg[i]}</mark>&nbsp;&nbsp;&nbsp;</p>
+                  </div>);
+        }
+
+
+      }
+
+
+    }
+
+
     var centerImage = "App-header";
     var app = "App";
     var msge = '';
@@ -155,23 +220,27 @@ msge = (      <div  className="Chat-header">
 
         <InputGroup className="mb-3">
           <FormControl
+          value={this.state.searchValueMsg}
             placeholder="message"
             aria-label="message"
             aria-describedby="basic-addon2"
+            onChange = {this.handleChangeMsg.bind(this)}
           />
           <InputGroup.Append>
-            <Button variant="outline-secondary">Button</Button>
+            <Button variant="outline-secondary" onClick = {this.handleClicksMsg}>Button</Button>
           </InputGroup.Append>
         </InputGroup>
 
         <div className="messenger">
-          <p>Hi there, looks like you weren't given access.</p>
+          <p><mark>Hi there,
+          Looks like you haven't been given access.</mark>&nbsp;&nbsp;&nbsp;</p>
         </div>
-
+{messages}
       </div>);
       centerImage += " App-header2";
       app += " AppLeft";
     }
+
 
 
 
