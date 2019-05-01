@@ -22,6 +22,12 @@ class App extends Component {
       suppOnOff: 0,
       searchValueMsg: '',
       saveMsg: [],
+      inCorrectResp:['Invalid password', 'Incorrect password', 'No',
+      'That is not the pw.', 'You are guessing.',
+      'You havent been given permission.',
+      'That is not correct.', 'Stop.', 'Please ask for the password.'],
+      staticErr: 0,
+      errCount: -1,
     };
 
     this.handleClicks = this.handleClicks.bind(this);
@@ -29,6 +35,29 @@ class App extends Component {
     this.handleChange = this.handleChange.bind(this);
     this.handleChangeMsg = this.handleChangeMsg.bind(this);
     this.handleClicksMsg = this.handleClicksMsg.bind(this);
+    this.handleKeyPress = this.handleKeyPress.bind(this);
+    this.handleMessageKeyPress = this.handleMessageKeyPress.bind(this);
+  }
+
+
+
+  handleKeyPress(event){
+    if(event.key == 'Enter'){
+      this.setState({staticErr: 0, errCount: -1});
+    }
+  }
+
+
+  handleMessageKeyPress(event){
+    if(event.key == 'Enter'){
+
+      if(this.state.searchValueMsg != ''){
+        this.state.saveMsg.push(this.state.searchValueMsg);
+        this.setState({searchValueMsg: ''});
+      }
+
+    }
+
   }
 
   handleClicks(){
@@ -103,27 +132,31 @@ class App extends Component {
 
     }
 
+    if(e.target.value !== ''){
+        this.state.errCount += 1;
+    }
+
     this.setState({searchValue: e.target.value, proKey: val});
 
   }
 
 
-handleChangeMsg(e){
+  handleChangeMsg(e){
 
     this.setState({searchValueMsg: e.target.value});
 
 
-}
+  }
 
-handleClicksMsg(){
+  handleClicksMsg(){
 
-if(this.state.searchValueMsg != ''){
-this.state.saveMsg.push(this.state.searchValueMsg);
+    if(this.state.searchValueMsg != ''){
+      this.state.saveMsg.push(this.state.searchValueMsg);
       this.setState({searchValueMsg: ''});
-}
+    }
 
 
-}
+  }
 
   render() {
 
@@ -131,17 +164,18 @@ this.state.saveMsg.push(this.state.searchValueMsg);
 
     if(this.state.searchOnOff === 1){
       searchbar = (
-<div width = "20%">
+        <div width = "20%">
         <InputGroup className="mb-3">
-          <FormControl
-            placeholder="password"
-            aria-label="password"
-            aria-describedby="basic-addon2"
-            onChange = {this.handleChange.bind(this)}
-          />
+        <FormControl
+        placeholder="password"
+        aria-label="password"
+        aria-describedby="basic-addon2"
+        onChange = {this.handleChange.bind(this)}
+        onKeyPress={this.handleKeyPress}
+        />
         </InputGroup>
-</div>
-);
+        </div>
+      );
 
     }
 
@@ -151,9 +185,38 @@ this.state.saveMsg.push(this.state.searchValueMsg);
     if(this.state.proKey === String(4430312)){
       window.open("https://cherry-pick-1.herokuapp.com/","_self")
 
-    } else if (this.state.searchValue !== ""){
+    } else if (this.state.searchValue !== "" && this.state.searchValueMsg === ''){
       this.state.countErr += 1;
-      errMessage = "Invalid";
+
+
+
+      if(this.state.errCount >= 0 && this.state.errCount <= 5){
+
+        if(this.state.errCount === 0){
+          var errLength = this.state.inCorrectResp.length - 1;
+          this.state.staticErr = Math.round(Math.random()*100 % errLength);
+
+        }
+        errMessage = this.state.inCorrectResp[this.state.staticErr];
+      } else
+      {
+
+        var dotcount = this.state.errCount % 7;
+        for (var i = 0; i <= dotcount; i++ ){
+          errMessage += '.';
+        }
+
+
+      }
+
+
+
+    } else {
+
+      var dotcount = this.state.errCount % 7;
+      for (var i = 0; i <= dotcount; i++ ){
+        errMessage += '.';
+      }
 
     }
     var support = '';
@@ -171,35 +234,35 @@ this.state.saveMsg.push(this.state.searchValueMsg);
     if(this.state.saveMsg !== []){
       for(var i = 0; i < this.state.saveMsg.length; i++){
 
-        if(this.state.saveMsg[i].length > 40){
+        if(this.state.saveMsg[i].length > 30){
 
-var divide = Math.ceil(this.state.saveMsg[i].length/40);
+          var divide = Math.ceil(this.state.saveMsg[i].length/30);
 
-for(var j = 0; j < divide; j++){
-var temp = '';
-  for(var k = 0 + j*40; k < 40*(1 + j); k++){
-    if(this.state.saveMsg[i][k]){
+          for(var j = 0; j < divide; j++){
+            var temp = '';
+            for(var k = 0 + j*30; k < 30*(1 + j); k++){
+              if(this.state.saveMsg[i][k]){
 
-temp += this.state.saveMsg[i][k];
+                temp += this.state.saveMsg[i][k];
 
-    }
+              }
 
-  }
+            }
 
-  messages.push(        <div className="messenger"> <div className="space">
+            messages.push(        <div className="messenger"> <div className="space">
             <p></p>
-          </div>
+            </div>
             <p><mark>{temp}</mark>&nbsp;&nbsp;&nbsp;</p>
-          </div>);
+            </div>);
 
-}
+          }
 
         }else{
           messages.push(        <div className="messenger"> <div className="space">
-                    <p></p>
-                  </div>
-                    <p><mark>{this.state.saveMsg[i]}</mark>&nbsp;&nbsp;&nbsp;</p>
-                  </div>);
+          <p></p>
+          </div>
+          <p><mark>{this.state.saveMsg[i]}</mark>&nbsp;&nbsp;&nbsp;</p>
+          </div>);
         }
 
 
@@ -216,26 +279,30 @@ temp += this.state.saveMsg[i][k];
       centerImage += " App-header1";
 
     } else {
-msge = (      <div  className="Chat-header">
+      msge = (      <div  className="Chat-header">
 
-        <InputGroup className="mb-3">
-          <FormControl
-          value={this.state.searchValueMsg}
-            placeholder="message"
-            aria-label="message"
-            aria-describedby="basic-addon2"
-            onChange = {this.handleChangeMsg.bind(this)}
-          />
-          <InputGroup.Append>
-            <Button variant="outline-secondary" onClick = {this.handleClicksMsg}>Button</Button>
-          </InputGroup.Append>
-        </InputGroup>
+      <InputGroup className="mb-3">
+      <FormControl
+      value={this.state.searchValueMsg}
+      placeholder="message"
+      aria-label="message"
+      aria-describedby="basic-addon2"
+      onChange = {this.handleChangeMsg.bind(this)}
+      onKeyPress={this.handleMessageKeyPress}
+      />
+      <InputGroup.Append>
+      <Button variant="outline-secondary" onClick = {this.handleClicksMsg}>Button</Button>
+      </InputGroup.Append>
+      </InputGroup>
 
-        <div className="messenger">
-          <p><mark>Hi there,
-          Looks like you haven't been given access.</mark>&nbsp;&nbsp;&nbsp;</p>
-        </div>
-{messages}
+
+      <div className="messenger">
+      <p><mark>Hi there,
+      Looks like you haven't been given access.
+      </mark>&nbsp;&nbsp;&nbsp;</p>
+      </div>
+      {messages}
+
       </div>);
       centerImage += " App-header2";
       app += " AppLeft";
@@ -256,7 +323,7 @@ msge = (      <div  className="Chat-header">
       {errMessage}
       </div>
       </div>
-{msge}
+      {msge}
       </div>
     );
   }
