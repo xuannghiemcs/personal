@@ -43,7 +43,7 @@ class App extends Component {
 
   handleKeyPress(event){
     if(event.key == 'Enter'){
-      this.setState({staticErr: 0, errCount: -1});
+      this.setState({staticErr: 0, errCount: 0});
     }
   }
 
