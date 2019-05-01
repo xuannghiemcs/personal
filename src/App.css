@@ -4,6 +4,8 @@
 
 .AppLeft {
   float: left;
+    width: 10%;
+
 }
 
 
@@ -14,6 +16,7 @@
   align-items: center;
   font-size: calc(10px + 2vmin);
   color: white;
+
 }
 
 .Chat-header {
@@ -60,4 +63,8 @@ div.messenger {
   background: #bbbbbb;
   background: rgba(0, 0, 0, 0.15);
   border-radius: 5px;
-  height: 20px; }
+  height: 20px;
+
+
+
+ }
