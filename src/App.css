@@ -28,11 +28,17 @@
   flex-direction: column;
   align-items: flex-end;
   font-size: calc(10px + 2vmin);
-  color: white;
+
 
 }
 
 
+div.containmsg{
+  min-height: 90vh;
+max-height: 90vh;
+overflow: scroll;
+
+}
 
 div.messenger {
   font-size: calc(15px);
@@ -41,12 +47,16 @@ div.messenger {
 
 }
 
-.space {
+div.space {
   font-size: calc(10px);
   min-height: 0vh;
   align-items: flex-end;
 
+}
 
+div.usr {
+
+  text-align: right;
 }
 
 .App-header1 {
@@ -58,6 +68,13 @@ div.messenger {
 .App-header2 {
 
 }
+
+
+mark.comp {
+  background-color: blue;
+  color: black;
+}
+
 
 ::-webkit-scrollbar-thumb {
   background: #bbbbbb;

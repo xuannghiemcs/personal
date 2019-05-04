@@ -3,7 +3,7 @@ import logo from './awards-boxed.png';
 import './App.css';
 import {Button, InputGroup, FormControl} from 'react-bootstrap';
 
-
+import makeSense from './makeSense';
 
 class App extends Component {
 
@@ -52,7 +52,16 @@ class App extends Component {
     if(event.key == 'Enter'){
 
       if(this.state.searchValueMsg != ''){
-        this.state.saveMsg.push(this.state.searchValueMsg);
+        this.state.saveMsg.push(<div class = "usr">
+  <p><mark>{this.state.searchValueMsg}</mark></p>
+  </div>);
+
+var response = makeSense(this.state.searchValueMsg);
+  this.state.saveMsg.push(      <div className="messenger">
+        <p><mark className = "comp">{response}</mark></p>
+        </div>);
+
+
         this.setState({searchValueMsg: ''});
       }
 
@@ -249,19 +258,15 @@ class App extends Component {
 
             }
 
-            messages.push(        <div className="messenger"> <div className="space">
-            <p></p>
-            </div>
-            <p><mark>{temp}</mark>&nbsp;&nbsp;&nbsp;</p>
+            messages.push(        <div class="messenger">
+            <p><mark>{temp}</mark></p>
             </div>);
 
           }
 
         }else{
-          messages.push(        <div className="messenger"> <div className="space">
-          <p></p>
-          </div>
-          <p><mark>{this.state.saveMsg[i]}</mark>&nbsp;&nbsp;&nbsp;</p>
+          messages.push(        <div class="messenger">
+          <p><mark>{this.state.saveMsg[i]}</mark></p>
           </div>);
         }
 
@@ -279,31 +284,31 @@ class App extends Component {
       centerImage += " App-header1";
 
     } else {
-      msge = (      <div  className="Chat-header">
+      msge = (
 
-      <InputGroup className="mb-3">
-      <FormControl
-      value={this.state.searchValueMsg}
-      placeholder="message"
-      aria-label="message"
-      aria-describedby="basic-addon2"
-      onChange = {this.handleChangeMsg.bind(this)}
-      onKeyPress={this.handleMessageKeyPress}
-      />
-      <InputGroup.Append>
-      <Button variant="outline-secondary" onClick = {this.handleClicksMsg}>Button</Button>
-      </InputGroup.Append>
-      </InputGroup>
+         <div  class="Chat-header">
 
+         <InputGroup className="mb-3">
+           <FormControl
+           value={this.state.searchValueMsg}
+           placeholder="message"
+           aria-label="message"
+           aria-describedby="basic-addon2"
+           onChange = {this.handleChangeMsg.bind(this)}
+           onKeyPress={this.handleMessageKeyPress}
+           />
+           <InputGroup.Append>
+           <Button variant="outline-secondary" onClick = {this.handleClicksMsg}>Button</Button>
+           </InputGroup.Append>
+           </InputGroup>
 
-      <div className="messenger">
-      <p><mark>Hi there,
+      <div class="containmsg">
+      <div class="messenger">
+      <p><mark className = "comp">Hi there,
       Looks like you haven't been given access.
-      </mark>&nbsp;&nbsp;&nbsp;</p>
-      </div>
-      {messages}
-
-      </div>);
+      </mark></p>
+      </div>{messages}</div></div>
+      );
       centerImage += " App-header2";
       app += " AppLeft";
     }
