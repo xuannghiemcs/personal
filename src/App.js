@@ -52,14 +52,14 @@ class App extends Component {
     if(event.key == 'Enter'){
 
       if(this.state.searchValueMsg != ''){
-        this.state.saveMsg.push(<div class = "usr">
-  <p><mark>{this.state.searchValueMsg}</mark></p>
-  </div>);
+        this.state.saveMsg.push(
+  <p className = "usr"><mark>{this.state.searchValueMsg}</mark></p>
+  );
 
 var response = makeSense(this.state.searchValueMsg);
-  this.state.saveMsg.push(      <div className="messenger">
+  this.state.saveMsg.push(
         <p><mark className = "comp">{response}</mark></p>
-        </div>);
+        );
 
 
         this.setState({searchValueMsg: ''});
@@ -160,7 +160,7 @@ var response = makeSense(this.state.searchValueMsg);
   handleClicksMsg(){
 
     if(this.state.searchValueMsg != ''){
-      this.state.saveMsg.push(this.state.searchValueMsg);
+      this.state.saveMsg.push(  <p className = "usr"><mark>{this.state.searchValueMsg}</mark></p>);
       this.setState({searchValueMsg: ''});
     }
 
@@ -243,32 +243,9 @@ var response = makeSense(this.state.searchValueMsg);
     if(this.state.saveMsg !== []){
       for(var i = 0; i < this.state.saveMsg.length; i++){
 
-        if(this.state.saveMsg[i].length > 30){
 
-          var divide = Math.ceil(this.state.saveMsg[i].length/30);
+          messages.push(      this.state.saveMsg[i]);
 
-          for(var j = 0; j < divide; j++){
-            var temp = '';
-            for(var k = 0 + j*30; k < 30*(1 + j); k++){
-              if(this.state.saveMsg[i][k]){
-
-                temp += this.state.saveMsg[i][k];
-
-              }
-
-            }
-
-            messages.push(        <div class="messenger">
-            <p><mark>{temp}</mark></p>
-            </div>);
-
-          }
-
-        }else{
-          messages.push(        <div class="messenger">
-          <p><mark>{this.state.saveMsg[i]}</mark></p>
-          </div>);
-        }
 
 
       }
@@ -298,16 +275,23 @@ var response = makeSense(this.state.searchValueMsg);
            onKeyPress={this.handleMessageKeyPress}
            />
            <InputGroup.Append>
-           <Button variant="outline-secondary" onClick = {this.handleClicksMsg}>Button</Button>
+           <Button variant="outline-secondary"
+           onClick = {this.handleClicksMsg}>Button</Button>
            </InputGroup.Append>
            </InputGroup>
 
-      <div class="containmsg">
-      <div class="messenger">
+      <div className="containmsg">
+      <div className="messenger">
       <p><mark className = "comp">Hi there,
       Looks like you haven't been given access.
       </mark></p>
-      </div>{messages}</div></div>
+
+
+  {messages}
+
+      </div>
+
+    </div></div>
       );
       centerImage += " App-header2";
       app += " AppLeft";
