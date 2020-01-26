@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
-import logo from './awards-boxed.png';
+
 import './App.css';
 import {Button, InputGroup, FormControl} from 'react-bootstrap';
+
+import SupportPerson from './components/SupportPerson';
+import SupportPersonPasswordReply from './components/SupportPersonPasswordReply';
 
 import makeSense from './makeSense';
 
@@ -15,19 +18,15 @@ class App extends Component {
 
     // save the users in the state
     this.state = {
-      searchOnOff: 0,
-      searchValue: '',
-      countErr: 0,
-      proKey:'',
-      suppOnOff: 0,
-      searchValueMsg: '',
+      resumeKey: "4422212",
+      turnPortfolioSearchBarOnOff: 0,
+      portfolioSearchBoxValue: '',
+      userGuessResumeKey:'',
+      turnSupportMessengerOnOff: 0,
+      userChatBoxValue: '',
       saveMsg: [],
-      inCorrectResp:['Invalid password', 'Incorrect password', 'No',
-      'That is not the pw.', 'You are guessing.',
-      'You havent been given permission.',
-      'That is not correct.', 'Stop.', 'Please ask for the password.'],
       staticErr: 0,
-      errCount: -1,
+      countUserGuessResumeKey: -1,
     };
 
     this.handleClicks = this.handleClicks.bind(this);
@@ -43,7 +42,7 @@ class App extends Component {
 
   handleKeyPress(event){
     if(event.key == 'Enter'){
-      this.setState({staticErr: 0, errCount: 0});
+      this.setState({staticErr: 0, countUserGuessResumeKey: 0});
     }
   }
 
@@ -51,18 +50,18 @@ class App extends Component {
   handleMessageKeyPress(event){
     if(event.key == 'Enter'){
 
-      if(this.state.searchValueMsg != ''){
+      if(this.state.userChatBoxValue != ''){
         this.state.saveMsg.push(
-  <p className = "usr"><mark>{this.state.searchValueMsg}</mark></p>
-  );
+          <p className = "usr"><mark>{this.state.userChatBoxValue}</mark></p>
+        );
 
-var response = makeSense(this.state.searchValueMsg);
-  this.state.saveMsg.push(
-        <p><mark className = "comp">{response}</mark></p>
+        var response = makeSense(this.state.userChatBoxValue);
+        this.state.saveMsg.push(
+          <p><mark className = "comp">{response}</mark></p>
         );
 
 
-        this.setState({searchValueMsg: ''});
+        this.setState({userChatBoxValue: ''});
       }
 
     }
@@ -70,10 +69,10 @@ var response = makeSense(this.state.searchValueMsg);
   }
 
   handleClicks(){
-    if(this.state.searchOnOff === 0){
-      this.setState({searchOnOff: 1});
+    if(this.state.turnPortfolioSearchBarOnOff === 0){
+      this.setState({turnPortfolioSearchBarOnOff: 1});
     } else {
-      this.setState({searchOnOff: 0});
+      this.setState({turnPortfolioSearchBarOnOff: 0});
 
     }
 
@@ -82,11 +81,11 @@ var response = makeSense(this.state.searchValueMsg);
 
 
   handleSuppClicks(){
-    if(this.state.suppOnOff === 0){
+    if(this.state.turnSupportMessengerOnOff === 0){
 
-      this.setState({suppOnOff: 1});
+      this.setState({turnSupportMessengerOnOff: 1});
     } else {
-      this.setState({suppOnOff: 0});
+      this.setState({turnSupportMessengerOnOff: 0});
 
 
     }
@@ -142,26 +141,26 @@ var response = makeSense(this.state.searchValueMsg);
     }
 
     if(e.target.value !== ''){
-        this.state.errCount += 1;
+      this.state.countUserGuessResumeKey += 1;
     }
 
-    this.setState({searchValue: e.target.value, proKey: val});
+    this.setState({portfolioSearchBoxValue: e.target.value, userGuessResumeKey: val});
 
   }
 
 
   handleChangeMsg(e){
 
-    this.setState({searchValueMsg: e.target.value});
+    this.setState({userChatBoxValue: e.target.value});
 
 
   }
 
   handleClicksMsg(){
 
-    if(this.state.searchValueMsg != ''){
-      this.state.saveMsg.push(  <p className = "usr"><mark>{this.state.searchValueMsg}</mark></p>);
-      this.setState({searchValueMsg: ''});
+    if(this.state.userChatBoxValue != ''){
+      this.state.saveMsg.push(  <p className = "usr"><mark>{this.state.userChatBoxValue}</mark></p>);
+      this.setState({userChatBoxValue: ''});
     }
 
 
@@ -169,16 +168,22 @@ var response = makeSense(this.state.searchValueMsg);
 
   render() {
 
-    var searchbar;
+    // login with password
+    var portfolioSearchBar;
 
-    if(this.state.searchOnOff === 1){
-      searchbar = (
+    // prints error message when user types the wrong login
+    var wrongPasswordErrorMessage;
+    var support;
+
+    if(this.state.turnPortfolioSearchBarOnOff === 1){
+      portfolioSearchBar = (
         <div width = "20%">
         <InputGroup className="mb-3">
         <FormControl
         placeholder="password"
         aria-label="password"
         aria-describedby="basic-addon2"
+        value={this.state.portfolioSearchBoxValue}
         onChange = {this.handleChange.bind(this)}
         onKeyPress={this.handleKeyPress}
         />
@@ -186,136 +191,106 @@ var response = makeSense(this.state.searchValueMsg);
         </div>
       );
 
-    }
-
-
-    var errMessage = '';
-
-    if(this.state.proKey === String(4322212)){
-      window.open("https://resumex.herokuapp.com/","_self")
-
-    } else if (this.state.searchValue !== "" && this.state.searchValueMsg === ''){
-      this.state.countErr += 1;
-
-
-
-      if(this.state.errCount >= 0 && this.state.errCount <= 5){
-
-        if(this.state.errCount === 0){
-          var errLength = this.state.inCorrectResp.length - 1;
-          this.state.staticErr = Math.round(Math.random()*100 % errLength);
-
-        }
-        errMessage = this.state.inCorrectResp[this.state.staticErr];
-      } else
-      {
-
-        var dotcount = this.state.errCount % 7;
-        for (var i = 0; i <= dotcount; i++ ){
-          errMessage += '.';
-        }
-
+      if(this.state.userGuessResumeKey === this.state.resumeKey){
+        window.open("https://resumex.herokuapp.com/","_self");
 
       }
 
+      var supportPersonPasswordReply = <SupportPersonPasswordReply
+      userGuessResumeKey = {this.state.userGuessResumeKey}
+      resumeKey = {this.state.resumeKey}
+      portfolioSearchBoxValue = {this.state.portfolioSearchBoxValue}
+      countUserGuessResumeKey = {this.state.countUserGuessResumeKey }
+      userChatBoxValue = {this.state.userChatBoxValue}
+      handleSuppClicks = {this.handleSuppClicks}
+      />
 
-
-    } else {
-
-      var dotcount = this.state.errCount % 7;
-      for (var i = 0; i <= dotcount; i++ ){
-        errMessage += '.';
-      }
-
-    }
-    var support = '';
-
-    if(this.state.countErr >= 30){
-      support = (    <header className = "iconFloat">    <img src={logo} alt="cherry"
-      width="120" height="120" onClick = {this.handleSuppClicks}/>
-      </header>);
+      wrongPasswordErrorMessage = supportPersonPasswordReply;
 
     }
 
 
 
-    var messages = [];
-    if(this.state.saveMsg !== []){
-      for(var i = 0; i < this.state.saveMsg.length; i++){
+    var supportPerson = (<SupportPerson
+      userGuessResumeKey = {this.state.userGuessResumeKey}
+      resumeKey = {this.state.resumeKey}
+      portfolioSearchBoxValue = {this.state.portfolioSearchBoxValue}
+      countUserGuessResumeKey = {this.state.countUserGuessResumeKey }
+      userChatBoxValue = {this.state.userChatBoxValue}
+      handleSuppClicks = {this.handleSuppClicks}
+      />);
 
+      support = supportPerson;
 
+      var messages = [];
+      if(this.state.saveMsg !== []){
+        for(var i = 0; i < this.state.saveMsg.length; i++){
           messages.push(      this.state.saveMsg[i]);
-
-
-
+        }
       }
 
+      var centerImage = "App-header";
+      var app = "App";
+      var msge = '';
+      if(this.state.turnSupportMessengerOnOff === 0){
+        centerImage += " App-header1";
 
-    }
+      } else {
+        msge = (
 
+          <div  class="Chat-header">
 
-    var centerImage = "App-header";
-    var app = "App";
-    var msge = '';
-    if(this.state.suppOnOff === 0){
-      centerImage += " App-header1";
+          <InputGroup className="mb-3">
+          <FormControl
+          value={this.state.userChatBoxValue}
+          placeholder="message"
+          aria-label="message"
+          aria-describedby="basic-addon2"
+          onChange = {this.handleChangeMsg.bind(this)}
+          onKeyPress={this.handleMessageKeyPress}
+          />
+          <InputGroup.Append>
+          <Button variant="outline-secondary"
+          onClick = {this.handleClicksMsg}>Button</Button>
+          </InputGroup.Append>
+          </InputGroup>
 
-    } else {
-      msge = (
-
-         <div  class="Chat-header">
-
-         <InputGroup className="mb-3">
-           <FormControl
-           value={this.state.searchValueMsg}
-           placeholder="message"
-           aria-label="message"
-           aria-describedby="basic-addon2"
-           onChange = {this.handleChangeMsg.bind(this)}
-           onKeyPress={this.handleMessageKeyPress}
-           />
-           <InputGroup.Append>
-           <Button variant="outline-secondary"
-           onClick = {this.handleClicksMsg}>Button</Button>
-           </InputGroup.Append>
-           </InputGroup>
-
-      <div className="containmsg">
-      <div className="messenger">
-      <p><mark className = "comp">Hi there,
-      Looks like you haven't been given access.
-      </mark></p>
+          <div className="containmsg">
+          <div className="messenger">
+          <p><mark className = "comp">Hi there,
+          Looks like you haven't been given access.
+          </mark></p>
 
 
-  {messages}
+          {messages}
 
-      </div>
+          </div>
 
-    </div></div>
+          </div></div>
+        );
+        centerImage += " App-header2";
+        app += " AppLeft";
+      }
+
+      return (
+        <div>
+        <div className={app}>
+        <div className={centerImage}>
+        {support}
+
+        <p onClick = {this.handleClicks}>
+        Portfolio
+        </p>
+        {portfolioSearchBar}
+        {wrongPasswordErrorMessage}
+
+        </div>
+        </div>
+        {msge}
+
+        </div>
       );
-      centerImage += " App-header2";
-      app += " AppLeft";
     }
-
-
-
-
-    return (
-      <div>
-      <div className={app}>
-      <div className={centerImage}>
-      {support}
-      <p onClick = {this.handleClicks}>
-      Portfolio
-      </p>
-      {searchbar}
-      {errMessage}
-      </div>
-      </div>
-      {msge}
-      </div>
-    );
   }
-}
 
-export default App;
+  export default App;
